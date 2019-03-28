@@ -1,0 +1,2 @@
+- name: 如果没有，则创建 software 文件夹
+  file: path=/opt/software state=directory

@@ -1,0 +1,2 @@
+- name: 复制 tomcat war 包到 /opt/software 文件夹下
+  copy: src=/opt/software/apache-tomcat-8.5.20.tar.gz dest=/opt/software owner=java group=java

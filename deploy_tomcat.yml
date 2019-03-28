@@ -1,0 +1,8 @@
+---
+- hosts: "{{ ip }}"
+  vars_files:
+    - "group_vars/all.yml"
+  remote_user: test
+  become: true
+  roles:
+    - role: tomcat

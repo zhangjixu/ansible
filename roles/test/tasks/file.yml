@@ -1,0 +1,4 @@
+- name: create file
+  file: path=/home/test/{{ file_name }} state=touch
+- name: print vars
+  debug: msg={{ user }}

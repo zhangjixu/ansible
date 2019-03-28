@@ -1,0 +1,2 @@
+- name: 解压 tomcat war 包到 /usr/local 目录下
+  shell: chdir=/opt/software tar -zxvf apache-tomcat-8.5.20.tar.gz -C /usr/local
