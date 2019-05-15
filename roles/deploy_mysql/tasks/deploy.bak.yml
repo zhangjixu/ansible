@@ -1,0 +1,40 @@
+---
+- name: 创建 mysql 用户组
+  group: name=mysql state=present system=true
+- name: 创建 mysql 用户
+  user: name=mysql group=mysql
+- name: 创建 data 目录
+  file: path={{ path }} state=directory owner=mysql group=mysql
+- name: 创建 mysql data 目录
+  file: path={{ mysql_path }} state=directory owner=mysql group=mysql
+
+#- name: 获取当前机器版本 centos 6 还是 7 并注册变量
+#  shell: echo "{{ ansible_distribution_major_version }}"
+#  register: major_version
+
+- name: 拷贝 mysql yum 源文件
+  template: src=oracle.repo.j2 dest=/etc/yum.repos.d/oracle.repo
+
+- name: 安装 mysql 包
+  yum:
+    name:
+      - mysql-community-common-5.7.25-1.el{{ ansible_distribution_major_version }}.x86_64
+      - mysql-community-libs-5.7.25-1.el{{ ansible_distribution_major_version }}.x86_64
+      - mysql-community-client-5.7.25-1.el{{ ansible_distribution_major_version }}.x86_64
+      - mysql-community-server-5.7.25-1.el{{ ansible_distribution_major_version }}.x86_64
+
+- name: 更换 my.cnf 配置文件
+  template: src=my.cnf.j2 dest=/etc/my.cnf
+  notify: start mysql
+
+- meta: flush_handlers
+
+- name: 更改 root 用户密码
+  shell: mysql -uroot -e "use mysql; update user set authentication_string=PASSWORD('{{ mysql_root_pwd }}'), password_expired='N', password_last_changed=now() where user='root';flush privileges;"
+- name: 替换配置文件(注释免密登录)
+  template: src=my.cnf1.j2 dest=/etc/my.cnf
+  notify: restart mysql
+
+
+
+

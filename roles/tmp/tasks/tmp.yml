@@ -1,0 +1,8 @@
+---
+- name: tmp
+  shell: mysql -h 192.168.xx.xx -uroot -proot -e "show master status;"
+  register: master_status
+- name: print tmp
+  debug: msg="{{ master_status['stdout_lines'][1].split(\"\t\")[0] }}  {{ master_status['stdout_lines'][1].split(\"\t\")[1] }}"
+- name: debug
+  debug: msg=" uuuuuuuuuuuuuuu {{ test_vars }} "

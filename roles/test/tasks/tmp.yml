@@ -1,0 +1,27 @@
+---
+#- name: 新建 mysql 账户
+#  mysql_user: login_host=127.0.0.1 login_user=root login_password=root name=slave password=slave host="%" priv="*.*:all" state=present
+
+- name: 查看主库状态并注册成变量
+  shell: mysql -h {{ master }} -uroot -p{{ mysql_root_pwd }} -e "show master status;"
+  register: master_status
+
+- name: print master_status
+  debug: msg={{ master_status }}
+
+- name: file
+  shell: echo {{ master_status['stdout_lines'][1] }}
+  register: file
+
+- name: debug
+  debug: msg={{ file['stdout'].split(" ")[0] }}
+
+- name: master
+  shell: mysql -uroot -p{{ mysql_root_pwd }} -e " stop slave; change master to master_host='192.168.99.43',master_user='slave',master_password='slave',master_log_file='mybinlog.000003',master_log_pos=154; flush privileges;start slave;"
+
+- name: 执行同步命令1
+  shell: mysql -uroot -p{{ mysql_root_pwd }} -e "stop slave;  change master to master_host='{{ master }}',master_user='{{ slave_user }}',master_password='{{ slave_pwd }}',master_log_file='{{ file['stdout'].split(" ")[0] }}',master_log_pos={{ file['stdout'].split(" ")[1] }}; flush privileges;start slave;"
+
+- name: 执行同步命令2
+  shell: mysql -uroot -p{{ mysql_root_pwd }} -e "stop slave;  change master to master_host='{{ master }}',master_user='{{ slave_user }}',master_password='{{ slave_pwd }}',master_log_file='{{ file['stdout'].split(" ")[0] }}',master_log_pos={{ file['stdout'].split(" ")[1] }}; flush privileges;start slave;"
+

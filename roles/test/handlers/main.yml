@@ -1,0 +1,9 @@
+---
+- name: h1
+  debug: msg=" 第一次 handlers "
+- name: h2
+  debug: msg=" 第二次 handlers "
+- name: h3
+  debug: msg=" 第三次 handlers "
+- name: h4
+  debug: msg=" 第四次 handlers "

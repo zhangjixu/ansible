@@ -1,2 +1,0 @@
-- name: 给 tomcat8 文件夹赋权限
-  shell: chdir=/usr/local chown -R java:java tomcat8

@@ -1,0 +1,14 @@
+---
+- hosts: "{{ master }}"
+  remote_user: java
+  become: true
+
+  roles:
+  - role: master_mysql
+
+- hosts: "{{ slave }}"
+  remote_user: java
+  become: true
+
+  roles:
+  - role: slave_mysql

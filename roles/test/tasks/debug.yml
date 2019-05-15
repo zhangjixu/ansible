@@ -1,0 +1,4 @@
+- name: debug user
+  debug: msg="test_vars 和 自定义的变量优先级大的是 {{ user }}"
+- name: debug path
+  debug: msg="自定义的变量 path {{ path }}"

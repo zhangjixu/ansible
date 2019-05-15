@@ -1,5 +1,2 @@
-- include: create_dir.yml
-- include: copy_tar_gz.yml
-- include: unpack_tar.yml
-- include: modfiy_name.yml
-- include: permissions.yml
+---
+- include_tasks: tomcat.yml

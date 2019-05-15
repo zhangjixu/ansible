@@ -1,0 +1,18 @@
+[mysql-connectors-community]
+name=MySQL Connectors Community
+baseurl=http://repo.mysql.com/yum/mysql-connectors-community/el/{{ ansible_distribution_major_version }}/$basearch/
+enabled=1
+gpgcheck=0
+
+[mysql-tools-community]
+name=MySQL Tools Community
+baseurl=http://repo.mysql.com/yum/mysql-tools-community/el/{{ ansible_distribution_major_version }}/$basearch/
+enabled=1
+gpgcheck=0
+
+[mysql-community]
+name=MySQL 5.7 Community Server
+baseurl=http://repo.mysql.com/yum/mysql-5.7-community/el/{{ ansible_distribution_major_version }}/$basearch/
+enabled=1
+gpgcheck=0
+

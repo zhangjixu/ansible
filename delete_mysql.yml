@@ -1,0 +1,8 @@
+---
+- hosts: "{{ ip }}"
+  # 不需要获取被控机器的 fact 数据
+  remote_user: java
+  become: true
+
+  roles:
+  - role: delete_mysql

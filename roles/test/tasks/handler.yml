@@ -1,0 +1,23 @@
+---
+- name: handlers
+  template: src=my.cnf.j2 dest=/home/java/data/my.cnf
+  notify: h1
+
+- meta: flush_handlers
+
+- name: test
+  template: src=my.cnf1.j2 dest=/home/java/data/my.cnf
+  notify: h2
+
+- meta: flush_handlers
+
+- name: handlers
+  template: src=my.cnf.j2 dest=/home/java/data/my.cnf
+  notify: h3
+
+- meta: flush_handlers
+
+- name: test
+  template: src=my.cnf1.j2 dest=/home/java/data/my.cnf
+  notify: h4
+

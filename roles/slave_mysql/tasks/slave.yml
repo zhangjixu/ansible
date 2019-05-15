@@ -1,0 +1,45 @@
+---
+- name: 创建 mysql 用户组
+  group: name=mysql state=present system=true
+- name: 创建 mysql 用户
+  user: name=mysql group=mysql
+- name: 创建 data 目录
+  file: path={{ path }} state=directory owner=mysql group=mysql
+- name: 创建 mysql data 目录
+  file: path={{ mysql_path }} state=directory owner=mysql group=mysql
+
+- name: 创建 software 目录
+  file: path={{ package_path }} state=directory
+- name: 拷贝 mysql 安装包到目标机器
+  copy: src={{ package_path }}/mysql{{ ansible_distribution_major_version }}.tar.gz dest={{ package_path }}/mysql{{ ansible_distribution_major_version }}.tar.gz
+- name: 解压 mysql 安装包
+  unarchive: src={{ package_path }}/mysql{{ ansible_distribution_major_version }}.tar.gz dest={{ package_path }} copy=no
+- name: 安装 mysql
+  shell: chdir={{ package_path }}/mysql{{ ansible_distribution_major_version }} rpm -i mysql-community-common-5.7.24-1.el{{ ansible_distribution_major_version }}.x86_64.rpm mysql-community-libs-5.7.24-1.el{{ ansible_distribution_major_version }}.x86_64.rpm mysql-community-client-5.7.24-1.el{{ ansible_distribution_major_version }}.x86_64.rpm mysql-community-server-5.7.24-1.el{{ ansible_distribution_major_version }}.x86_64.rpm
+
+- name: 更换 my.cnf 配置文件
+  template: src=my.cnf.j2 dest=/etc/my.cnf
+  notify: start mysql
+
+- meta: flush_handlers
+
+- name: 更改 root 用户密码
+  shell: mysql -uroot -e "use mysql; update user set authentication_string=PASSWORD('{{ mysql_root_pwd }}'), host='%', password_expired='N', password_last_changed=now() where user='root';flush privileges;"
+- name: 替换配置文件(注释免密登录)
+  template: src=my.cnf1.j2 dest=/etc/my.cnf
+  notify: restart mysql
+
+- name: 查看主库状态并注册成变量
+  shell: mysql -h {{ master }} -uroot -p{{ mysql_root_pwd }} -e "show master status;"
+  register: master_status
+
+- name: 过度变量
+  shell: echo {{ master_status['stdout_lines'][1] }}
+  register: tmp_vars
+
+- name: 执行同步命令
+  shell: mysql -uroot -p{{ mysql_root_pwd }} -e "change master to master_host='{{ master }}',master_user='{{ slave_user }}',master_password='{{ slave_pwd }}',master_log_file='{{ tmp_vars['stdout'].split(" ")[0] }}',master_log_pos={{ tmp_vars['stdout'].split(" ")[1] }}; flush privileges;start slave;"
+
+
+
+

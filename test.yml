@@ -1,7 +1,22 @@
 ---
-- hosts: "{{ ip }}"
-  vars_files:
-    - "group_vars/all.yml"
-  remote_user: test
+#- hosts: "{{ master }}"
+#  remote_user: java
+#  become: true
+#
+#  vars:
+#      user: defined_vars
+#      path: /path/defined
+#
+#  roles:
+#    - role: test
+
+- hosts: "{{ slave }}"
+  remote_user: java
+  become: true
+
+  vars:
+    user: defined_vars
+    path: /path/defined
+
   roles:
-  - role: test
+    - role: test

@@ -1,0 +1,22 @@
+- name: 停止 mysql 服务
+  service: name=mysqld state=stopped
+  ignore_errors: True
+
+- name: 获取当前机器版本 centos 6 还是 7 并注册变量
+  shell: echo "{{ ansible_distribution_major_version }}"
+  register: major_version
+
+- name: 删除 mysql 包
+  yum: name=mysql-community-common-5.7.24-1.el{{ major_version.stdout_lines[0] }}.x86_64 state=absent
+  ignore_errors: True
+- name: 删除 /data/mysql
+  shell: rm -rf /data/mysql*
+- name: 删除 mysql 配置文件
+  shell: rm -rf /etc/my.cnf*
+  ignore_errors: True
+- name: 删除 lib 下 mysql 文件
+  shell: rm -rf /var/lib/mysql*
+  ignore_errors: True
+- name: 删除 log 下 mysql 文件
+  shell: rm -rf /var/log/mysql*
+  ignore_errors: True

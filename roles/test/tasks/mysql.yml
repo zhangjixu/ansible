@@ -1,0 +1,4 @@
+#- name: 增加 mysql 用户
+#  mysql_user: login_unix_socket=/data/mysql/mysql.sock  login_user=root login_password=root name=zhang host_all=yes state=absent
+- name: 获取 master 状态
+  mysql_replication: config_file=/etc/my.cnf login_unix_socket=/data/mysql/mysql.sock login_user=root login_password=root mode=getmaster

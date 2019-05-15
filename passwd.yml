@@ -1,0 +1,10 @@
+---
+- hosts: 192.168.xx.xx
+  # 不需要获取被控机器的 fact 数据
+  gather_facts: no
+  remote_user: java
+  become: true
+
+  tasks:
+    - name: 更新 root 账户密码
+      shell: mysql -uroot -e "use mysql; update user set authentication_string=PASSWORD('root'), password_expired='N', password_last_changed=now() where user='root';flush privileges;"

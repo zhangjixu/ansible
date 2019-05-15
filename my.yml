@@ -1,0 +1,8 @@
+---
+- hosts: 192.168.xx.xx
+  # 不需要获取被控机器的 fact 数据
+  gather_facts: no
+  remote_user: java
+  become: true
+
+  tasks:

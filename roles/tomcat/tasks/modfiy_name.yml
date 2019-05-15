@@ -1,2 +1,0 @@
-- name: 修改 tomcat 名字
-  shell: chdir=/usr/local mv apache-tomcat-8.5.20 tomcat8

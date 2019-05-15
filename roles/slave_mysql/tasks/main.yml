@@ -1,0 +1,2 @@
+- include_vars: roles/master_mysql/vars/main.yml
+- include_tasks: slave.yml

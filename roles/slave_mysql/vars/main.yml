@@ -8,6 +8,3 @@ path: /data
 mysql_path: /data/mysql
 mysql_root_pwd: root
 package_path: /opt/software
-slave_user: slave
-slave_pwd: slave
-sql: select host from mysql.user;

@@ -1,0 +1,3 @@
+## 引入 roles 下的变量文件
+- include_vars: roles/test/vars/main.yml
+- include_tasks: tmp.yml

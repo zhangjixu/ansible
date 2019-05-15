@@ -1,0 +1,22 @@
+---
+- name: register 用法
+  shell: echo 6
+  register: register
+
+- name: 打印 register 注册的值
+  debug: msg=" ------------- {{ register }} "
+
+
+- name: 当前机器版本
+  shell: echo "{{ ansible_distribution_major_version }}"
+  register: major_version
+
+- name: debug mysql
+  debug: msg=" mysql mysql-community-libs-5.7.25-1.el"{{ major_version.stdout_lines[0] }}".x86_64 "
+
+
+- name: print
+  debug: msg=" print {{ major_version.stdout_lines[0] }} "
+
+- name: 模板拷贝
+  template: src=oracle.repo.j2 dest=/home/java/data/oracle.repo

@@ -1,0 +1,16 @@
+---
+- name: 拷贝 tomcat 包到目标机器
+  copy: src={{ package_path }}/apache-tomcat-8.5.20.tar.gz dest={{ package_path }}/apache-tomcat-8.5.20.tar.gz
+
+- name: 解压 tomcat 包
+  unarchive: src={{ package_path }}/apache-tomcat-8.5.20.tar.gz dest={{ dest_path }} copy=no owner=java group=java
+
+- name: 修改解压后的包名以及权限
+  shell: chdir={{ dest_path }} mv apache-tomcat-8.5.20 tomcat8 && chown -R java:java tomcat8
+
+- name: 启动 tomcat
+  shell: chdir=/usr/local/tomcat8/bin nohup ./catalina.sh start &
+
+- name: 停止 tomcat
+  shell: pkill -9 -f tomcat8
+  ignore_errors: True
